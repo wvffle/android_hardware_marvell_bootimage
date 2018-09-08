@@ -28,10 +28,16 @@ TARGET_CPU_ABI2     := armeabi
 BOARD_HARDWARE_CLASS += hardware/samsung/cmhw
 
 # Graphics
-#TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
-# Qualcomm support
-#BOARD_USES_QCOM_HARDWARE := true
+MRVL_ION := true
+
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+LOCAL_CFLAGS += -DMR0_AUDIO_BLOB -DRM1_AUDIO_BLOB
+
+# Bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_MRVL := true
 
 # Recovery
 #TARGET_RECOVERY_DEVICE_DIRS += device/samsung/qcom-common
@@ -41,3 +47,14 @@ BOARD_HAS_DOWNLOAD_MODE := true
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/mrvl-common/tools/custom_mkbootimg.mk
 BOARD_CUSTOM_MKBOOTIMG := mkbootimg-pxa
+
+# Malloc
+MALLOC_SVELTE := true
+
+# MRVL
+BOARD_USES_MRVL_HARDWARE := true
+BOARD_USES_MARVELL_HWC_ENHANCEMENT := true
+LOCAL_CFLAGS += -DMARVELL_HWC_ENHANCEMENT
+
+# Power
+TARGET_POWERHAL_VARIANT := mrvl

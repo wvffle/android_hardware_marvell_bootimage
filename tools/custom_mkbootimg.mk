@@ -54,20 +54,17 @@ endif
 #-------------------------------------------#
 # Generate uBoot from the kernel (Image.gz) #
 #-------------------------------------------#
-IMAGE_GZ := $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/Image.gz
-
 $(INSTALLED_UBOOT_TARGET): $(MKIMAGE)
-	$(MKIMAGE) $(BOARD_UBOOT_ARGS) -d $(IMAGE_GZ) $@
+	$(MKIMAGE) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $@
 	@echo ----- Made uBoot -------- $@
+
 
 #-------------------------------------------#
 #            Generate Boot.img              #
 #-------------------------------------------#
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(MKBOOTFS) $(MINIGZIP)
-	@echo $(INSTALLED_UBOOT_TARGET) 
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(MKBOOTFS) $(MINIGZIP) $(INSTALLED_RAMDISK_TARGET)
 	$(call pretty,"Target boot image: $@")
-	$(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > ramdisk.img
 	@echo -e ${CL_CYN}"----- Making boot image ------"${CL_RST}
 	@echo -e "$(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@"
 	$(hide) $(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
@@ -79,9 +76,6 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIM
 #           Generate recovery.img           #
 #-------------------------------------------#
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS)
-#	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $(recovery_uncompressed_ramdisk)
-#	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $(recovery_ramdisk)
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 	@echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
 	@echo -e "$(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
 	$(hide) $(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@
