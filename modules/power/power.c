@@ -27,6 +27,8 @@
 
 #define POWERHALCFG "/etc/powerhal.conf"
 
+#define __AFILE__ "power.c"
+
 struct power_cpu_info
 {
 	char path[256];
@@ -118,10 +120,9 @@ void pm_set_for_device( struct power_cpu_info *device, int on )
 		return;
 	}
 	if( write(device->control_fd, "auto", 4) >= 0 )
-	{
 		ALOGD("write auto done\n");
-	}
-	ALOGE("Error writing %s to %s: %s\n", "auto", device->path, strerror(errno));
+	else
+		ALOGE("Error writing %s to %s: %s\n", "auto", device->path, strerror(errno));
 }
 
 void wait_for_set_complete(const char* runtime_path, int on )
@@ -191,13 +192,14 @@ static void power_init(__attribute__((unused)) struct power_module *module)
 		memset(control, 0, sizeof(control));
 		if( buffer[0] != '#' && buffer[0] != '\n' && buffer[0] != ' ' )
 		{
+			buffer[strlen(buffer)-1] = '\0';
 			strncpy(control, buffer, 256);
 			strncat(control, "/control", 256);
 			strncpy(runtime, buffer, 256);
 			strncat(runtime, "/runtime_status", 256);
 			if( is_pm_supported(control, runtime) )
 			{
-				ALOGE("device %s do not support pm\n", buffer);
+				ALOGE("device %s doesn't support pm\n", buffer);
 				continue;
 			}
 			fd = open(control, 2);
@@ -270,3 +272,13 @@ struct power_module HAL_MODULE_INFO_SYM = {
     .setInteractive = power_set_interactive,
     .powerHint = power_hint,
 };
+
+__attribute__((constructor)) void __module_load__()
+{
+	ALOGI("%s loaded.", "power.mrvl.so");
+}
+
+__attribute__((destructor)) void __module_unload__()
+{
+	ALOGI("%s unloaded.", "power.mrvl.so");
+}
