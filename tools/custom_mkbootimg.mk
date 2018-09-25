@@ -24,6 +24,14 @@ else
 possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/ $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/
 endif
 
+ifeq ($(MKIMAGE_ARM64),)
+MKIMAGE_ARM64 := device/samsung/mrvl-common/tools/mkimage_arm64
+endif
+
+ifeq ($(BOARD_UBOOT_IMAGE_NAME),)
+BOARD_UBOOT_IMAGE_NAME := uKernel
+endif
+
 define build-dtimage-target
 	$(call pretty,"Target dt image: $@")
 	$(hide) for dir in $(possible_dtb_dirs); do \
@@ -54,8 +62,9 @@ endif
 #-------------------------------------------#
 # Generate uBoot from the kernel (Image.gz) #
 #-------------------------------------------#
-$(INSTALLED_UBOOT_TARGET): $(MKIMAGE)
-	$(MKIMAGE) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $@
+$(BOARD_UBOOT_IMAGE_NAME):
+	@echo -e "$(MKIMAGE_ARM64) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME)$@"
+	$(hide) $(MKIMAGE_ARM64) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$@
 	@echo ----- Made uBoot -------- $@
 
 
@@ -63,11 +72,12 @@ $(INSTALLED_UBOOT_TARGET): $(MKIMAGE)
 #            Generate Boot.img              #
 #-------------------------------------------#
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(MKBOOTFS) $(MINIGZIP) $(INSTALLED_RAMDISK_TARGET)
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(MKBOOTFS) $(MINIGZIP) $(INSTALLED_RAMDISK_TARGET) $(BOARD_UBOOT_IMAGE_NAME)
 	$(call pretty,"Target boot image: $@")
 	@echo -e ${CL_CYN}"----- Making boot image ------"${CL_RST}
-	@echo -e "$(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@"
-	$(hide) $(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
+	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/$(TARGET_RAMDISK_KERNEL)
+	@echo -e "$(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@"
+	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
 	@echo -e ${CL_CYN}"Made boot image: $@"${CL_RST}
@@ -75,10 +85,11 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIM
 #-------------------------------------------#
 #           Generate recovery.img           #
 #-------------------------------------------#
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS)
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS) $(UBOOT_KERNEL_IMAGE_NAME)
 	@echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
-	@echo -e "$(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
-	$(hide) $(BOARD_CUSTOM_MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@
+	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/$(TARGET_RAMDISK_KERNEL)
+	@echo -e "$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
+	$(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@
 
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
 	@echo -e ${CL_CYN}"Made recovery image: $@"${CL_RST}

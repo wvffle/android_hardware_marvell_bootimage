@@ -45,7 +45,8 @@ BOARD_HAVE_BLUETOOTH_MRVL := true
 BOARD_HAS_DOWNLOAD_MODE := true
 
 # Kernel
-#BOARD_CUSTOM_BOOTIMG_MK := device/samsung/mrvl-common/tools/custom_mkbootimg.mk
+TARGET_CUSTOM_DTBTOOL := dtbToolpxa1908
+BOARD_CUSTOM_BOOTIMG_MK := device/samsung/mrvl-common/tools/custom_mkbootimg.mk
 BOARD_CUSTOM_MKBOOTIMG := mkbootimg-pxa
 
 # Malloc
