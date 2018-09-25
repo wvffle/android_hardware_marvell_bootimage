@@ -25,7 +25,7 @@ possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/ $(KERNEL_OUT)/ar
 endif
 
 ifeq ($(MKIMAGE_ARM64),)
-MKIMAGE_ARM64 := device/samsung/mrvl-common/tools/mkimage_arm64
+MKIMAGE_ARM64 := mkimage_arm64
 endif
 
 ifeq ($(BOARD_UBOOT_IMAGE_NAME),)
@@ -62,7 +62,7 @@ endif
 #-------------------------------------------#
 # Generate uBoot from the kernel (Image.gz) #
 #-------------------------------------------#
-$(BOARD_UBOOT_IMAGE_NAME):
+$(BOARD_UBOOT_IMAGE_NAME): $(MKIMAGE_ARM64)
 	@echo -e "$(MKIMAGE_ARM64) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME)$@"
 	$(hide) $(MKIMAGE_ARM64) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$@
 	@echo ----- Made uBoot -------- $@

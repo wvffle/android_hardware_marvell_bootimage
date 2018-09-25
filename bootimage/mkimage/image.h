@@ -134,15 +134,42 @@ enum {
  *	useful when you configure U-Boot to use a real shell (hush)
  *	as command interpreter (=> Shell Scripts).
  */
+enum {
+  IH_TYPE_INVALID   = 0,  /* Invalid Image    */
+  IH_TYPE_STANDALONE,   /* Standalone Program   */
+  IH_TYPE_KERNEL,     /* OS Kernel Image    */
+  IH_TYPE_RAMDISK,    /* RAMDisk Image    */
+  IH_TYPE_MULTI,      /* Multi-File Image   */
+  IH_TYPE_FIRMWARE,   /* Firmware Image   */
+  IH_TYPE_SCRIPT,     /* Script file      */
+  IH_TYPE_FILESYSTEM,   /* Filesystem Image (any type)  */
+  IH_TYPE_FLATDT,     /* Binary Flat Device Tree Blob */
+  IH_TYPE_KWBIMAGE,   /* Kirkwood Boot Image    */
+  IH_TYPE_IMXIMAGE,   /* Freescale IMXBoot Image  */
+  IH_TYPE_UBLIMAGE,   /* Davinci UBL Image    */
+  IH_TYPE_OMAPIMAGE,    /* TI OMAP Config Header Image  */
+  IH_TYPE_AISIMAGE,   /* TI Davinci AIS Image   */
+  /* OS Kernel Image, can run from any load address */
+  IH_TYPE_KERNEL_NOLOAD,
+  IH_TYPE_PBLIMAGE,   /* Freescale PBL Boot Image */
+  IH_TYPE_MXSIMAGE,   /* Freescale MXSBoot Image  */
+  IH_TYPE_GPIMAGE,    /* TI Keystone GPHeader Image */
+  IH_TYPE_ATMELIMAGE,   /* ATMEL ROM bootable Image */
+  IH_TYPE_SOCFPGAIMAGE,   /* Altera SOCFPGA Preloader */
+  IH_TYPE_X86_SETUP,    /* x86 setup.bin Image    */
+  IH_TYPE_LPC32XXIMAGE,   /* x86 setup.bin Image    */
+  IH_TYPE_LOADABLE,   /* A list of typeless images  */
+  IH_TYPE_RKIMAGE,    /* Rockchip Boot Image    */
+  IH_TYPE_RKSD,     /* Rockchip SD card   */
+  IH_TYPE_RKSPI,      /* Rockchip SPI image   */
+  IH_TYPE_ZYNQIMAGE,    /* Xilinx Zynq Boot Image */
+  IH_TYPE_ZYNQMPIMAGE,    /* Xilinx ZynqMP Boot Image */
+  IH_TYPE_FPGA,     /* FPGA Image */
+  IH_TYPE_VYBRIDIMAGE,  /* VYBRID .vyb Image */
 
-#define IH_TYPE_INVALID		0	/* Invalid Image		*/
-#define IH_TYPE_STANDALONE	1	/* Standalone Program		*/
-#define IH_TYPE_KERNEL		2	/* OS Kernel Image		*/
-#define IH_TYPE_RAMDISK		3	/* RAMDisk Image		*/
-#define IH_TYPE_MULTI		4	/* Multi-File Image		*/
-#define IH_TYPE_FIRMWARE	5	/* Firmware Image		*/
-#define IH_TYPE_SCRIPT		6	/* Script file			*/
-#define IH_TYPE_FILESYSTEM	7	/* Filesystem Image (any type)	*/
+  IH_TYPE_COUNT,      /* Number of image types */
+};
+
 
 /*
  * Compression Types
