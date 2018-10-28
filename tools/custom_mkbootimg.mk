@@ -62,7 +62,7 @@ endif
 #-------------------------------------------#
 # Generate uBoot from the kernel (Image.gz) #
 #-------------------------------------------#
-$(BOARD_UBOOT_IMAGE_NAME): $(MKIMAGE_ARM64) $(INSTALLED_RAMDISK_TARGET)
+$(BOARD_UBOOT_IMAGE_NAME): $(MKIMAGE_ARM64) $(INSTALLED_KERNEL_TARGET)
 	@echo -e "$(MKIMAGE_ARM64) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$@"
 	$(hide) $(MKIMAGE_ARM64) $(BOARD_UBOOT_ARGS) -d $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_KERNEL_IMAGE_NAME) $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$@
 	@echo ----- Made uBoot -------- $@

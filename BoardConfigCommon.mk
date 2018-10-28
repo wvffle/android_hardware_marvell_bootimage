@@ -48,7 +48,8 @@ BOARD_HAS_DOWNLOAD_MODE := true
 BOARD_CUSTOM_MKBOOTIMG := mkbootimg-pxa
 
 # Malloc
-MALLOC_SVELTE := true
+#MALLOC_SVELTE := true
+MALLOC_IMPL := dlmalloc
 
 # MRVL
 BOARD_USES_MRVL_HARDWARE := true
