@@ -47,10 +47,6 @@ BOARD_HAS_DOWNLOAD_MODE := true
 # Kernel
 BOARD_CUSTOM_MKBOOTIMG := mkbootimg-pxa
 
-# Malloc
-#MALLOC_SVELTE := true
-#MALLOC_IMPL := dlmalloc
-
 # MRVL
 BOARD_USES_MRVL_HARDWARE := true
 BOARD_USES_MARVELL_HWC_ENHANCEMENT := true
