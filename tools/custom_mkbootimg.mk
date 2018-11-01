@@ -85,7 +85,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIM
 #-------------------------------------------#
 #           Generate recovery.img           #
 #-------------------------------------------#
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS) $(UBOOT_KERNEL_IMAGE_NAME)
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS) $(BOARD_UBOOT_IMAGE_NAME)
 	@echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
 	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/kernel
 	@echo -e "$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
