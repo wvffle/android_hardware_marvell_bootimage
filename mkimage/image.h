@@ -59,42 +59,32 @@
 /*
  * CPU Architecture Codes (supported by Linux)
  */
-/*
- * CPU Architecture Codes (supported by Linux)
- *
- * The following are exposed to uImage header.
- * Do not change values for backward compatibility.
- */
-enum {
-  IH_ARCH_INVALID   = 0,  /* Invalid CPU  */
-  IH_ARCH_ALPHA,      /* Alpha  */
-  IH_ARCH_ARM,      /* ARM    */
-  IH_ARCH_I386,     /* Intel x86  */
-  IH_ARCH_IA64,     /* IA64   */
-  IH_ARCH_MIPS,     /* MIPS   */
-  IH_ARCH_MIPS64,     /* MIPS  64 Bit */
-  IH_ARCH_PPC,      /* PowerPC  */
-  IH_ARCH_S390,     /* IBM S390 */
-  IH_ARCH_SH,     /* SuperH */
-  IH_ARCH_SPARC,      /* Sparc  */
-  IH_ARCH_SPARC64,    /* Sparc 64 Bit */
-  IH_ARCH_M68K,     /* M68K   */
-  IH_ARCH_NIOS,     /* Nios-32  */
-  IH_ARCH_MICROBLAZE,   /* MicroBlaze   */
-  IH_ARCH_NIOS2,      /* Nios-II  */
-  IH_ARCH_BLACKFIN,   /* Blackfin */
-  IH_ARCH_AVR32,      /* AVR32  */
-  IH_ARCH_ST200,      /* STMicroelectronics ST200  */
-  IH_ARCH_SANDBOX,    /* Sandbox architecture (test only) */
-  IH_ARCH_NDS32,      /* ANDES Technology - NDS32  */
-  IH_ARCH_OPENRISC,   /* OpenRISC 1000  */
-  IH_ARCH_ARM64,      /* ARM64  */
-  IH_ARCH_ARC,      /* Synopsys DesignWare ARC */
-  IH_ARCH_X86_64,     /* AMD x86_64, Intel and Via */
-  IH_ARCH_XTENSA,     /* Xtensa */
-
-  IH_ARCH_COUNT,
-};
+#define IH_CPU_INVALID		0	/* Invalid CPU	*/
+#define IH_CPU_ALPHA		1	/* Alpha	*/
+#define IH_CPU_ARM		2	/* ARM		*/
+#define IH_CPU_I386		3	/* Intel x86	*/
+#define IH_CPU_IA64		4	/* IA64		*/
+#define IH_CPU_MIPS		5	/* MIPS		*/
+#define IH_CPU_MIPS64		6	/* MIPS	 64 Bit */
+#define IH_CPU_PPC		7	/* PowerPC	*/
+#define IH_CPU_S390		8	/* IBM S390	*/
+#define IH_CPU_SH		9	/* SuperH	*/
+#define IH_CPU_SPARC		10	/* Sparc	*/
+#define IH_CPU_SPARC64		11	/* Sparc 64 Bit */
+#define IH_CPU_M68K		12	/* M68K		*/
+#define IH_CPU_NIOS		13	/* Nios-32	*/
+#define IH_CPU_MICROBLAZE	14	/* MicroBlaze   */
+#define IH_CPU_NIOS2		15	/* Nios-II	*/
+#define IH_CPU_BLACKFIN		16	/* Blackfin	*/
+#define IH_CPU_AVR32    17   /* AVR32  */
+#define IH_CPU_ST200    18   /* STMicroelectronics ST200  */
+#define IH_CPU_SANDBOX  19   /* Sandbox architecture (test only) */
+#define IH_CPU_NDS32    20   /* ANDES Technology - NDS32  */
+#define IH_CPU_OPENRISC 21   /* OpenRISC 1000  */
+#define IH_CPU_ARM64    22   /* ARM64  */
+#define IH_CPU_ARC      23   /* Synopsys DesignWare ARC */
+#define IH_CPU_X86_64   24   /* AMD x86_64, Intel and Via */
+#define IH_CPU_XTENSA   25   /* Xtensa */
 
 /*
  * Image Types
@@ -134,56 +124,50 @@ enum {
  *	useful when you configure U-Boot to use a real shell (hush)
  *	as command interpreter (=> Shell Scripts).
  */
-enum {
-  IH_TYPE_INVALID   = 0,  /* Invalid Image    */
-  IH_TYPE_STANDALONE,   /* Standalone Program   */
-  IH_TYPE_KERNEL,     /* OS Kernel Image    */
-  IH_TYPE_RAMDISK,    /* RAMDisk Image    */
-  IH_TYPE_MULTI,      /* Multi-File Image   */
-  IH_TYPE_FIRMWARE,   /* Firmware Image   */
-  IH_TYPE_SCRIPT,     /* Script file      */
-  IH_TYPE_FILESYSTEM,   /* Filesystem Image (any type)  */
-  IH_TYPE_FLATDT,     /* Binary Flat Device Tree Blob */
-  IH_TYPE_KWBIMAGE,   /* Kirkwood Boot Image    */
-  IH_TYPE_IMXIMAGE,   /* Freescale IMXBoot Image  */
-  IH_TYPE_UBLIMAGE,   /* Davinci UBL Image    */
-  IH_TYPE_OMAPIMAGE,    /* TI OMAP Config Header Image  */
-  IH_TYPE_AISIMAGE,   /* TI Davinci AIS Image   */
-  /* OS Kernel Image, can run from any load address */
-  IH_TYPE_KERNEL_NOLOAD,
-  IH_TYPE_PBLIMAGE,   /* Freescale PBL Boot Image */
-  IH_TYPE_MXSIMAGE,   /* Freescale MXSBoot Image  */
-  IH_TYPE_GPIMAGE,    /* TI Keystone GPHeader Image */
-  IH_TYPE_ATMELIMAGE,   /* ATMEL ROM bootable Image */
-  IH_TYPE_SOCFPGAIMAGE,   /* Altera SOCFPGA Preloader */
-  IH_TYPE_X86_SETUP,    /* x86 setup.bin Image    */
-  IH_TYPE_LPC32XXIMAGE,   /* x86 setup.bin Image    */
-  IH_TYPE_LOADABLE,   /* A list of typeless images  */
-  IH_TYPE_RKIMAGE,    /* Rockchip Boot Image    */
-  IH_TYPE_RKSD,     /* Rockchip SD card   */
-  IH_TYPE_RKSPI,      /* Rockchip SPI image   */
-  IH_TYPE_ZYNQIMAGE,    /* Xilinx Zynq Boot Image */
-  IH_TYPE_ZYNQMPIMAGE,    /* Xilinx ZynqMP Boot Image */
-  IH_TYPE_FPGA,     /* FPGA Image */
-  IH_TYPE_VYBRIDIMAGE,  /* VYBRID .vyb Image */
 
-  IH_TYPE_COUNT,      /* Number of image types */
-};
-
+#define IH_TYPE_INVALID		  0  /* Invalid Image		*/
+#define IH_TYPE_STANDALONE	  1  /* Standalone Program		*/
+#define IH_TYPE_KERNEL		  2  /* OS Kernel Image		*/
+#define IH_TYPE_RAMDISK		  3  /* RAMDisk Image		*/
+#define IH_TYPE_MULTI		  4  /* Multi-File Image		*/
+#define IH_TYPE_FIRMWARE	  5  /* Firmware Image		*/
+#define IH_TYPE_SCRIPT		  6  /* Script file			*/
+#define IH_TYPE_FILESYSTEM	  7  /* Filesystem Image (any type)	*/
+#define IH_TYPE_SCRIPT        8  /* Script file      */
+#define IH_TYPE_FILESYSTEM    9  /* Filesystem Image (any type)  */
+#define IH_TYPE_FLATDT        10 /* Binary Flat Device Tree Blob */
+#define IH_TYPE_KWBIMAGE      11 /* Kirkwood Boot Image    */
+#define IH_TYPE_IMXIMAGE      12 /* Freescale IMXBoot Image  */
+#define IH_TYPE_UBLIMAGE      13 /* Davinci UBL Image    */
+#define IH_TYPE_OMAPIMAGE     14 /* TI OMAP Config Header Image  */
+#define IH_TYPE_AISIMAGE      15 /* TI Davinci AIS Image   */
+/* OS Kernel Image, can run from any load address */
+#define IH_TYPE_KERNEL_NOLOAD 16
+#define IH_TYPE_PBLIMAGE      17 /* Freescale PBL Boot Image */
+#define IH_TYPE_MXSIMAGE      18 /* Freescale MXSBoot Image  */
+#define IH_TYPE_GPIMAGE       19 /* TI Keystone GPHeader Image */
+#define IH_TYPE_ATMELIMAGE    20 /* ATMEL ROM bootable Image */
+#define IH_TYPE_SOCFPGAIMAGE  21 /* Altera SOCFPGA Preloader */
+#define IH_TYPE_X86_SETUP     22 /* x86 setup.bin Image    */
+#define IH_TYPE_LPC32XXIMAGE  23 /* x86 setup.bin Image    */
+#define IH_TYPE_LOADABLE      24 /* A list of typeless images  */
+#define IH_TYPE_RKIMAGE       25 /* Rockchip Boot Image    */
+#define IH_TYPE_RKSD          26 /* Rockchip SD card   */
+#define IH_TYPE_RKSPI         27 /* Rockchip SPI image   */
+#define IH_TYPE_ZYNQIMAGE     28 /* Xilinx Zynq Boot Image */
+#define IH_TYPE_ZYNQMPIMAGE   29 /* Xilinx ZynqMP Boot Image */
+#define IH_TYPE_FPGA          30 /* FPGA Image */
+#define IH_TYPE_VYBRIDIMAGE   31 /* VYBRID .vyb Image */
 
 /*
  * Compression Types
  */
- enum {
-  IH_COMP_NONE    = 0,  /*  No   Compression Used */
-  IH_COMP_GZIP,     /* gzip  Compression Used */
-  IH_COMP_BZIP2,      /* bzip2 Compression Used */
-  IH_COMP_LZMA,     /* lzma  Compression Used */
-  IH_COMP_LZO,      /* lzo   Compression Used */
-  IH_COMP_LZ4,      /* lz4   Compression Used */
-
-  IH_COMP_COUNT,
-};
+#define IH_COMP_NONE		0	/*  No	 Compression Used	*/
+#define IH_COMP_GZIP		1	/* gzip	 Compression Used	*/
+#define IH_COMP_BZIP2		2	/* bzip2 Compression Used	*/
+#define IH_COMP_LZMA        3   /* lzma  Compression Used */
+#define IH_COMP_LZO         4   /* lzo   Compression Used */
+#define IH_COMP_LZ4         5   /* lz4   Compression Used */
 
 #define IH_MAGIC	0x27051956	/* Image Magic Number		*/
 #define IH_NMLEN		32	/* Image Name Length		*/

@@ -77,33 +77,33 @@ typedef struct table_entry {
 	char	*lname;		/* long (output) name		*/
 } table_entry_t;
 
-static const table_entry_t arch_name[] = {
-  { IH_ARCH_INVALID,  "invalid",  "Invalid ARCH", },
-  { IH_ARCH_ALPHA,    "alpha",  "Alpha",  },
-  { IH_ARCH_ARM,    "arm",    "ARM",    },
-  { IH_ARCH_I386,   "x86",    "Intel x86",  },
-  { IH_ARCH_IA64,   "ia64",   "IA64",   },
-  { IH_ARCH_M68K,   "m68k",   "M68K",   },
-  { IH_ARCH_MICROBLAZE, "microblaze", "MicroBlaze", },
-  { IH_ARCH_MIPS,   "mips",   "MIPS",   },
-  { IH_ARCH_MIPS64,   "mips64", "MIPS 64 Bit",  },
-  { IH_ARCH_NIOS2,    "nios2",  "NIOS II",  },
-  { IH_ARCH_PPC,    "powerpc",  "PowerPC",  },
-  { IH_ARCH_PPC,    "ppc",    "PowerPC",  },
-  { IH_ARCH_S390,   "s390",   "IBM S390", },
-  { IH_ARCH_SH,   "sh",   "SuperH", },
-  { IH_ARCH_SPARC,    "sparc",  "SPARC",  },
-  { IH_ARCH_SPARC64,  "sparc64",  "SPARC 64 Bit", },
-  { IH_ARCH_BLACKFIN, "blackfin", "Blackfin", },
-  { IH_ARCH_AVR32,    "avr32",  "AVR32",  },
-  { IH_ARCH_NDS32,    "nds32",  "NDS32",  },
-  { IH_ARCH_OPENRISC, "or1k",   "OpenRISC 1000",},
-  { IH_ARCH_SANDBOX,  "sandbox",  "Sandbox",  },
-  { IH_ARCH_ARM64,    "arm64",  "AArch64",  },
-  { IH_ARCH_ARC,    "arc",    "ARC",    },
-  { IH_ARCH_X86_64,   "x86_64", "AMD x86_64", },
-  { IH_ARCH_XTENSA,   "xtensa", "Xtensa", },
-  { -1,     "",   "",   },
+table_entry_t arch_name[] = {
+    {	IH_CPU_INVALID,		NULL,		"Invalid CPU",	},
+    {	IH_CPU_ALPHA,		"alpha",	"Alpha",	},
+    {	IH_CPU_ARM,		"arm",		"ARM",		},
+    {	IH_CPU_I386,		"x86",		"Intel x86",	},
+    {	IH_CPU_IA64,		"ia64",		"IA64",		},
+    {	IH_CPU_M68K,		"m68k",		"MC68000",	},
+    {	IH_CPU_MICROBLAZE,	"microblaze",	"MicroBlaze",	},
+    {	IH_CPU_MIPS,		"mips",		"MIPS",		},
+    {	IH_CPU_MIPS64,		"mips64",	"MIPS 64 Bit",	},
+    {	IH_CPU_NIOS,		"nios",		"NIOS",		},
+    {	IH_CPU_NIOS2,		"nios2",	"NIOS II",	},
+    {	IH_CPU_PPC,		"ppc",		"PowerPC",	},
+    {	IH_CPU_S390,		"s390",		"IBM S390",	},
+    {	IH_CPU_SH,		"sh",		"SuperH",	},
+    {	IH_CPU_SPARC,		"sparc",	"SPARC",	},
+    {	IH_CPU_SPARC64,		"sparc64",	"SPARC 64 Bit",	},
+    {	IH_CPU_BLACKFIN,	"blackfin",	"Blackfin",	},
+    {   IH_CPU_AVR32,    "avr32",  "AVR32",  },
+    {   IH_CPU_NDS32,    "nds32",  "NDS32",  },
+    {   IH_CPU_OPENRISC, "or1k",   "OpenRISC 1000",},
+    {   IH_CPU_SANDBOX,  "sandbox",  "Sandbox",  },
+    {   IH_CPU_ARM64,    "arm64",  "AArch64",  },
+    {   IH_CPU_ARC,    "arc",    "ARC",    },
+    {   IH_CPU_X86_64,   "x86_64", "AMD x86_64", },
+    {   IH_CPU_XTENSA,   "xtensa", "Xtensa", },
+    {	-1,			"",		"",		},
 };
 
 table_entry_t os_name[] = {
@@ -142,14 +142,14 @@ table_entry_t type_name[] = {
     {	-1,		    "",		  "",			},
 };
 
-static const table_entry_t comp_name[] = {
-  { IH_COMP_NONE, "none",   "uncompressed",   },
-  { IH_COMP_BZIP2,  "bzip2",  "bzip2 compressed", },
-  { IH_COMP_GZIP, "gzip",   "gzip compressed",  },
-  { IH_COMP_LZMA, "lzma",   "lzma compressed",  },
-  { IH_COMP_LZO,  "lzo",    "lzo compressed", },
-  { IH_COMP_LZ4,  "lz4",    "lz4 compressed", },
-  { -1,   "",   "",     },
+table_entry_t comp_name[] = {
+    {	IH_COMP_NONE,	"none",		"uncompressed",		},
+    {	IH_COMP_BZIP2,	"bzip2",	"bzip2 compressed",	},
+    {	IH_COMP_GZIP,	"gzip",		"gzip compressed",	},
+    {   IH_COMP_LZMA,   "lzma",     "lzma compressed",  },
+    {   IH_COMP_LZO,    "lzo",      "lzo compressed",   },
+    {   IH_COMP_LZ4,    "lz4",      "lz4 compressed",   },
+    {	-1,		"",		"",			},
 };
 
 static	void	copy_file (int, const char *, int);
@@ -177,7 +177,7 @@ int lflag    = 0;
 int vflag    = 0;
 int xflag    = 0;
 int opt_os   = IH_OS_LINUX;
-int opt_arch = IH_ARCH_PPC;
+int opt_arch = IH_CPU_PPC;
 int opt_type = IH_TYPE_KERNEL;
 int opt_comp = IH_COMP_GZIP;
 
@@ -711,7 +711,7 @@ static char *put_table_entry (table_entry_t *table, char *msg, int type)
 
 static int get_arch(char *name)
 {
-	return (get_table_entry(arch_name, "ARCH", name));
+	return (get_table_entry(arch_name, "CPU", name));
 }
 
 

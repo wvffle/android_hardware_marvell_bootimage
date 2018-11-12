@@ -25,7 +25,7 @@ possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/ $(KERNEL_OUT)/ar
 endif
 
 ifeq ($(MKIMAGE_ARM64),)
-MKIMAGE_ARM64 := mkimage_arm64
+MKIMAGE_ARM64 := mkimage
 endif
 
 ifeq ($(BOARD_UBOOT_IMAGE_NAME),)
