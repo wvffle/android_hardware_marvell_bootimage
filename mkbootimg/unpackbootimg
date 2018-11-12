@@ -13,6 +13,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+'''
+boot header :
+8bytes MAGIC   = ANDROID!
+4 bytes int    = kernel size
+4 bytes int    = kernel addr
+4 bytes int    = ramdisk size
+4 bytes int    = ramdisk addr
+4 bytes int    = second size
+4 bytes int    = second addr
+4 bytes int    = dtb size
+4 bytes int    = unknown flag value, see README
+4 bytes int    = kernel tags addr
+4 bytes int    = pagesize
+24bytes str    = Can be null, product name
+512bytes str   = cmdline
+8 4 bytes int  = id
+1024 bytes str = extra cmdline
+
++-----------------+
+| boot header     | 1 page
++-----------------+
+| kernel          | n pages
++-----------------+
+| ramdisk         | m pages
++-----------------+
+| second stage    | o pages
++-----------------+
+| device tree     | p pages
++-----------------+
+| signature       | 256 bytes without SEANDROIDENFORCE / 272 bytes with SEANDROIDENFORCE at beginning
++-----------------+
+'''
+
 from __future__ import print_function
 from sys import exit
 from argparse import ArgumentParser, FileType
@@ -171,7 +204,13 @@ def write_data(args, header, off):
     write_input_to_file(args, file_prefix+'ramdisk', header.ramdisk_size)
     write_input_to_file(args, file_prefix+'second', header.second_size)
     write_input_to_file(args, file_prefix+'dt', header.dt_size)
-    write_input_to_file(args, file_prefix+'signature', 272)
+
+    signature = args.input.read(16)
+    args.input.seek(-16, 1)
+    if signature == 'SEANDROIDENFORCE':
+        write_input_to_file(args, file_prefix+'signature', 272)
+    else:
+        write_input_to_file(args, file_prefix+'signature', 256)
 
     fix_ramdisk_extension(file_prefix+'ramdisk')
 
