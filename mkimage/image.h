@@ -124,7 +124,6 @@
  *	useful when you configure U-Boot to use a real shell (hush)
  *	as command interpreter (=> Shell Scripts).
  */
-
 #define IH_TYPE_INVALID		  0  /* Invalid Image		*/
 #define IH_TYPE_STANDALONE	  1  /* Standalone Program		*/
 #define IH_TYPE_KERNEL		  2  /* OS Kernel Image		*/
@@ -132,30 +131,30 @@
 #define IH_TYPE_MULTI		  4  /* Multi-File Image		*/
 #define IH_TYPE_FIRMWARE	  5  /* Firmware Image		*/
 #define IH_TYPE_SCRIPT		  6  /* Script file			*/
-#define IH_TYPE_FILESYSTEM	  7  /* Filesystem Image (any type)	*/
-#define IH_TYPE_SCRIPT        8  /* Script file      */
-#define IH_TYPE_FILESYSTEM    9  /* Filesystem Image (any type)  */
-#define IH_TYPE_FLATDT        10 /* Binary Flat Device Tree Blob */
-#define IH_TYPE_KWBIMAGE      11 /* Kirkwood Boot Image    */
-#define IH_TYPE_IMXIMAGE      12 /* Freescale IMXBoot Image  */
-#define IH_TYPE_UBLIMAGE      13 /* Davinci UBL Image    */
-#define IH_TYPE_OMAPIMAGE     14 /* TI OMAP Config Header Image  */
-#define IH_TYPE_AISIMAGE      15 /* TI Davinci AIS Image   */
+#define IH_TYPE_FILESYSTEM    7  /* Filesystem Image (any type)  */
+#define IH_TYPE_FLATDT        8  /* Binary Flat Device Tree Blob */
+#define IH_TYPE_KWBIMAGE      9  /* Kirkwood Boot Image    */
+#define IH_TYPE_IMXIMAGE      10 /* Freescale IMXBoot Image  */
+#define IH_TYPE_IM8IMAGE      11 /* Freescale IMX8Boot Image     */
+#define IH_TYPE_UBLIMAGE      12 /* Davinci UBL Image    */
+#define IH_TYPE_OMAPIMAGE     13 /* TI OMAP Config Header Image  */
+#define IH_TYPE_AISIMAGE      14 /* TI Davinci AIS Image   */
 /* OS Kernel Image, can run from any load address */
-#define IH_TYPE_KERNEL_NOLOAD 16
-#define IH_TYPE_PBLIMAGE      17 /* Freescale PBL Boot Image */
-#define IH_TYPE_MXSIMAGE      18 /* Freescale MXSBoot Image  */
-#define IH_TYPE_GPIMAGE       19 /* TI Keystone GPHeader Image */
-#define IH_TYPE_ATMELIMAGE    20 /* ATMEL ROM bootable Image */
-#define IH_TYPE_SOCFPGAIMAGE  21 /* Altera SOCFPGA Preloader */
-#define IH_TYPE_X86_SETUP     22 /* x86 setup.bin Image    */
-#define IH_TYPE_LPC32XXIMAGE  23 /* x86 setup.bin Image    */
-#define IH_TYPE_LOADABLE      24 /* A list of typeless images  */
-#define IH_TYPE_RKIMAGE       25 /* Rockchip Boot Image    */
-#define IH_TYPE_RKSD          26 /* Rockchip SD card   */
-#define IH_TYPE_RKSPI         27 /* Rockchip SPI image   */
-#define IH_TYPE_ZYNQIMAGE     28 /* Xilinx Zynq Boot Image */
-#define IH_TYPE_ZYNQMPIMAGE   29 /* Xilinx ZynqMP Boot Image */
+#define IH_TYPE_KERNEL_NOLOAD 15
+#define IH_TYPE_PBLIMAGE      16 /* Freescale PBL Boot Image */
+#define IH_TYPE_MXSIMAGE      17 /* Freescale MXSBoot Image  */
+#define IH_TYPE_GPIMAGE       18 /* TI Keystone GPHeader Image */
+#define IH_TYPE_ATMELIMAGE    19 /* ATMEL ROM bootable Image */
+#define IH_TYPE_SOCFPGAIMAGE  20 /* Altera SOCFPGA Preloader */
+#define IH_TYPE_X86_SETUP     21 /* x86 setup.bin Image    */
+#define IH_TYPE_LPC32XXIMAGE  22 /* x86 setup.bin Image    */
+#define IH_TYPE_LOADABLE      23 /* A list of typeless images  */
+#define IH_TYPE_RKIMAGE       24 /* Rockchip Boot Image    */
+#define IH_TYPE_RKSD          25 /* Rockchip SD card   */
+#define IH_TYPE_RKSPI         26 /* Rockchip SPI image   */
+#define IH_TYPE_ZYNQIMAGE     27 /* Xilinx Zynq Boot Image */
+#define IH_TYPE_ZYNQMPIMAGE   28 /* Xilinx ZynqMP Boot Image */
+#define IH_TYPE_ZYNQMPBIF     29 /* Xilinx ZynqMP Boot Image (bif) */
 #define IH_TYPE_FPGA          30 /* FPGA Image */
 #define IH_TYPE_VYBRIDIMAGE   31 /* VYBRID .vyb Image */
 
