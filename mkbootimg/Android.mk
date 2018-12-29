@@ -8,7 +8,7 @@ LOCAL_SRC_FILES := mkbootimg
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_IS_HOST_MODULE := true
 
-LOCAL_MODULE := mkbootimg
+LOCAL_MODULE := mkbootimg_pxa
 
 include $(BUILD_PREBUILT)
 
@@ -18,7 +18,7 @@ LOCAL_SRC_FILES := unpackbootimg
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_IS_HOST_MODULE := true
 
-LOCAL_MODULE := unpackbootimg
+LOCAL_MODULE := unpackbootimg_pxa
 
 include $(BUILD_PREBUILT)
 

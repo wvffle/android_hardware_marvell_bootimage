@@ -18,8 +18,12 @@ INSTALLED_DTIMAGE_TARGET := $(PRODUCT_OUT)/dt.img
 
 possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/ $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/
 
+ifeq ($(MKBOOTIMG_PXA),)
+MKBOOTIMG_PXA := mkbootimg_pxa
+endif
+
 ifeq ($(MKIMAGE_ARM64),)
-MKIMAGE_ARM64 := mkimage
+MKIMAGE_ARM64 := mkimage_arm64
 endif
 
 ifeq ($(BOARD_UBOOT_IMAGE_NAME),)
@@ -66,12 +70,12 @@ $(BOARD_UBOOT_IMAGE_NAME): $(MKIMAGE_ARM64) $(INSTALLED_KERNEL_TARGET)
 #            Generate Boot.img              #
 #-------------------------------------------#
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(MKBOOTFS) $(MINIGZIP) $(INSTALLED_RAMDISK_TARGET) $(BOARD_UBOOT_IMAGE_NAME)
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG_PXA) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS) $(MKBOOTFS) $(MINIGZIP) $(INSTALLED_RAMDISK_TARGET) $(BOARD_UBOOT_IMAGE_NAME)
 	$(call pretty,"Target boot image: $@")
 	@echo -e ${CL_CYN}"----- Making boot image ------"${CL_RST}
 	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/kernel
-	@echo -e "$(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@"
-	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
+	@echo -e "$(MKBOOTIMG_PXA) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@"
+	$(hide) $(MKBOOTIMG_PXA) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	echo -n "SEANDROIDENFORCE" >> $@
 
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
@@ -80,11 +84,11 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIM
 #-------------------------------------------#
 #           Generate recovery.img           #
 #-------------------------------------------#
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS) $(BOARD_UBOOT_IMAGE_NAME)
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG_PXA) $(MKBOOTFS) $(MINIGZIP) $(recovery_ramdisk) $(recovery_kernel) $(RECOVERYIMAGE_EXTRA_DEPS) $(BOARD_UBOOT_IMAGE_NAME)
 	@echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
 	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/kernel
-	@echo -e "$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
-	$(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@
+	@echo -e "$(MKBOOTIMG_PXA) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
+	$(hide) $(MKBOOTIMG_PXA) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@
 	echo -n "SEANDROIDENFORCE" >> $@
 
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
