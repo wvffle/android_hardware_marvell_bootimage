@@ -197,7 +197,7 @@ def parse_cmdline():
                         required=True)
 
     parser.add_argument('--unknown', help='unknown value, see README', type=parse_int, default=0x03000000)
-    parser.add_argument('--signature', help='Signature filename', type=FileType('rb'))
+    #parser.add_argument('--signature', help='Signature filename', type=FileType('rb'))
 
     return parser.parse_args()
 
@@ -207,7 +207,7 @@ def write_data(args):
     write_padded_file(args.output, args.ramdisk, args.pagesize)
     write_padded_file(args.output, args.second, args.pagesize)
     write_padded_file(args.output, args.dt, args.pagesize)
-    write_file(args.output, args.signature)
+    #write_file(args.output, args.signature)
 
 
 def main():

@@ -72,6 +72,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIM
 	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/kernel
 	@echo -e "$(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@"
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
+	echo -n "SEANDROIDENFORCE" >> $@
 
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
 	@echo -e ${CL_CYN}"Made boot image: $@"${CL_RST}
@@ -84,6 +85,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(MKBOOTFS) $(MINIGZIP) $(recove
 	cp $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/$(BOARD_UBOOT_IMAGE_NAME) $(PRODUCT_OUT)/kernel
 	@echo -e "$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@"
 	$(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKRECOVERYIMG_ARGS) --output $@
+	echo -n "SEANDROIDENFORCE" >> $@
 
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
 	@echo -e ${CL_CYN}"Made recovery image: $@"${CL_RST}
