@@ -19,7 +19,7 @@ INSTALLED_DTIMAGE_TARGET := $(PRODUCT_OUT)/dt.img
 possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/ $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/
 
 ifeq ($(MKBOOTIMG_PXA),)
-MKBOOTIMG_PXA := mkbootimg_pxa
+MKBOOTIMG_PXA := mkbootimg
 endif
 
 ifeq ($(MKIMAGE_ARM64),)
