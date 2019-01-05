@@ -1,0 +1,203 @@
+#!/usr/bin/env python
+# Copyright 2015, The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import print_function
+from sys import argv, exit, stderr
+from argparse import ArgumentParser, FileType, Action, ArgumentTypeError
+from os import fstat, path, listdir, remove
+from struct import pack
+from hashlib import sha1
+import sys
+import re
+import subprocess
+
+DT_MAGIC="PXA-19xx"
+DT_VERSION=1
+DT_TAG="pxa,rev-id = <"
+
+def multikeysort(items, columns):
+    from operator import itemgetter
+    comparers = [ ((itemgetter(col[1:].strip()), -1) if col.startswith('-') else (itemgetter(col.strip()), 1)) for col in columns]
+    def comparer(left, right):
+        for fn, mult in comparers:
+            result = cmp(fn(left), fn(right))
+            if result:
+                return mult * result
+        else:
+            return 0
+    return sorted(items, cmp=comparer)
+
+def add_chip(chips, chip, filepath, filename, pagesize):
+    for i in chips:
+        if i['platform'] == chip['platform'] and i['revNum'] == chip['revNum']:
+            print("Skipped duplicate chip...")
+            return
+
+    # Read the dtb size
+    size = path.getsize(filepath+filename)
+    # Align the DTB size to pagesize
+    chip['dtb_size'] = size + (pagesize - (size % pagesize))
+    chip['dtb_file'] = filename
+    chips.append(chip)
+
+def parse_int(x):
+    return int(x, 0)
+
+def parse_dtc(x):
+    if path.isdir(x) == False or path.isfile(x + "/dtc") == False:
+        raise ArgumentTypeError('must be an existing directory pointing to dtc directory')
+    return x + "/dtc"
+
+def parse_path(x):
+    if path.isdir(x) == False:
+        raise ArgumentTypeError('must be an existing directory containing .dtb files')
+    return x
+
+def parse_cmdline():
+    parser = ArgumentParser()
+
+    parser.add_argument('-v', help='verbose', action="store_true")
+    parser.add_argument('-s', '--pagesize', help='page size in bytes', type=parse_int, default=2048)
+    parser.add_argument('-p', '--dtc_path', help='path to dtc', type=parse_dtc, required=True)
+    parser.add_argument('-o', '--output', help='output file', type=FileType('wb'), required=True)
+
+    parser.add_argument('input_dir', type=parse_path, help='input DTB path')
+
+    return parser.parse_args()
+
+def getChipInfo(dtc_path, filename):
+    proc = subprocess.Popen([dtc_path, "-I", "dtb", "-O", "dts", filename], stdout=subprocess.PIPE)
+    chip = []
+    for line in proc.stdout:
+        entryValid = 0
+        try:
+            pos=line.index(DT_TAG)
+            line=line.strip()
+            if line[-2] == '>':
+                line=line[pos+len(DT_TAG)-1:-2]
+                entryValid = 1
+                data = re.split('[ \t]', line)
+                for i in range(0,2):
+                    if data[i]:
+                        data[i] = int(data[i], 0)
+
+                chip.append({
+                'platform':data[0],
+                'revNum':data[1],
+                'dtb_size':0,
+                'dtb_file':"",
+                'wroteDtb':False,
+                'master_offset':0
+                })
+                chip[-1]['master'] = chip[0]
+        except:
+            continue
+
+    proc.terminate()
+
+    return chip
+
+
+def main():
+    args = parse_cmdline()
+    print(args)
+
+    chips = []
+    for filename in listdir(args.input_dir):
+        if path.isfile(args.input_dir + filename) == True and len(args.input_dir + filename) > 4 and filename.endswith('.dtb') :
+            print("Found file {}...".format(filename))
+            chip = getChipInfo(args.dtc_path, args.input_dir + filename)
+            if len(chip) == 0:
+                print("skip, failed to scan for '{}' tag".format(DT_TAG))
+                continue
+            print("platform: {}, rev: {}".format(chip[0]["platform"], chip[0]['revNum']))
+            # Add chip if not duplicate
+            add_chip(chips, chip[0], args.input_dir, filename, args.pagesize)
+
+            for sub_chip in chip[1:]:
+                print("  additional platform: {}, rev: {}".format(sub_chip["platform"], sub_chip['revNum']))
+                # Add sub_chip if not duplicate
+                add_chip(chips, sub_chip)
+
+    print("Found {} unique dtb".format(len(chips)))
+    if len(chips) == 0:
+        exit(0)
+
+    # Sort by platform & revNum
+    chips = multikeysort(chips, ["platform", "revNum"])
+    print("Generating master DTB...")
+
+    # DTB img header
+    args.output.write(pack('{}s'.format(len(DT_MAGIC)), DT_MAGIC))
+    # DTB img version
+    args.output.write(pack('I', DT_VERSION))
+    # Num of dtbs
+    args.output.write(pack('I', len(chips)))
+
+    dtb_offset = len(DT_MAGIC) + 4 + 4 + 16 * len(chips) + 4
+    padding = args.pagesize - (dtb_offset % args.pagesize)
+    dtb_offset += padding
+    expected = dtb_offset
+
+    for chip in chips:
+        args.output.write(pack('I', chip['platform']))
+        args.output.write(pack('I', chip['revNum']))
+        if chip['master_offset'] != 0:
+            args.output.write(pack('I', chip['master_offset']))
+        else:
+            args.output.write(pack('I', expected))
+            chip['master']['master_offset'] = expected
+            expected += chip['master']['dtb_size']
+
+        args.output.write(pack('I', chip['master']['dtb_size']))
+
+
+    args.output.write(pack('I', 0))
+    # Pad the file to pagesize
+    if padding > 0:
+        args.output.write("".ljust(padding, '\0'))
+
+    # Write dtbs
+    for chip in chips:
+        if chip['master']['wroteDtb']:
+            continue
+
+        chip['master']['wroteDtb'] = True
+        f = open(args.input_dir + chip['dtb_file'], 'rb')
+        read_size = 0
+        while True:
+            buff = f.read(1024*1024)
+            if not buff:
+                break
+            read_size += len(buff)
+            args.output.write(buff)
+
+        padding = args.pagesize - (read_size % args.pagesize)
+        if (padding + read_size) != chip['master']['dtb_size']:
+            print("DTB size mismatch, please re-run")
+            args.output.close
+            remove(args.output.name)
+            exit(-1)
+
+        if padding > 0:
+            args.output.write("".ljust(padding, '\0'))
+
+    args.output.close()
+
+    print(chips)
+
+
+if __name__ == '__main__':
+    main()

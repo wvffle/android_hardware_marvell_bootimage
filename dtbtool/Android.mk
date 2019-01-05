@@ -11,12 +11,21 @@ include $(BUILD_HOST_EXECUTABLE)
 endif
 
 ifeq ($(TARGET_BOARD_SOC),pxa1908)
+
+
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := pxa1908-dtbtool.c
-LOCAL_CFLAGS += -Wall
+LOCAL_SRC_FILES := dtbToolPXA1908
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE := dtbToolPXA
-LOCAL_MODULE_TAGS := optional
-include $(BUILD_HOST_EXECUTABLE)
+include $(BUILD_PREBUILT)
+
+#include $(CLEAR_VARS)
+#LOCAL_SRC_FILES := pxa1908-dtbtool.c
+#LOCAL_CFLAGS += -Wall
+#LOCAL_MODULE := dtbToolPXA
+#LOCAL_MODULE_TAGS := optional
+#include $(BUILD_HOST_EXECUTABLE)
 endif
 
 endif
