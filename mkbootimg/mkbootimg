@@ -196,8 +196,8 @@ def parse_cmdline():
     parser.add_argument('-o', '--output', help='output file name', type=FileType('wb'),
                         required=True)
 
+    parser.add_argument('--seandroidenforce', help='Remove the "Kernel is not SEANDROID Enforcing" red message', action="store_true")
     parser.add_argument('--unknown', help='unknown value, see README', type=parse_int, default=0x03000000)
-    #parser.add_argument('--signature', help='Signature filename', type=FileType('rb'))
 
     return parser.parse_args()
 
@@ -207,7 +207,8 @@ def write_data(args):
     write_padded_file(args.output, args.ramdisk, args.pagesize)
     write_padded_file(args.output, args.second, args.pagesize)
     write_padded_file(args.output, args.dt, args.pagesize)
-    #write_file(args.output, args.signature)
+    if args.seandroidenforce:
+        args.output.write("SEANDROIDENFORCE".encode())
 
 
 def main():
