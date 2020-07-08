@@ -93,7 +93,7 @@ def getChipInfo(dtc_path, filename):
     proc = subprocess.Popen([dtc_path, "-I", "dtb", "-O", "dts", filename], stdout=subprocess.PIPE)
     chip = []
     for line in proc.stdout:
-        line = line.decode("utf-8") 
+        line = line.decode("ascii") 
         entryValid = 0
         if not DT_TAG in line:
             continue
@@ -162,7 +162,7 @@ def main():
     dt_magic_len = len(DT_MAGIC)
     
     # DTB img header
-    args.output.write(pack('{}s'.format(dt_magic_len), DT_MAGIC))
+    args.output.write(pack('{}s'.format(dt_magic_len), DT_MAGIC.encode('ascii')))
     # DTB img version
     args.output.write(pack('I', DT_VERSION))
     # Num of dtbs
