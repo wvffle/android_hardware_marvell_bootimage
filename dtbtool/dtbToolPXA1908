@@ -30,6 +30,16 @@ DT_TAG="pxa,rev-id = <"
 def multikeysort(items, columns):
     from operator import itemgetter
     comparers = [ ((itemgetter(col[1:].strip()), -1) if col.startswith('-') else (itemgetter(col.strip()), 1)) for col in columns]
+    
+    def cnp(left, right):
+        if (left < right):
+            return -1
+        
+        if (left > right):
+            return 1
+        
+        return 0
+    
     def comparer(left, right):
         for fn, mult in comparers:
             result = cmp(fn(left), fn(right))
@@ -37,6 +47,7 @@ def multikeysort(items, columns):
                 return mult * result
         else:
             return 0
+        
     from functools import cmp_to_key
     return sorted(items, key=cmp_to_key(comparer))
 
