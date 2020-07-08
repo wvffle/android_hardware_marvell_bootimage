@@ -85,7 +85,6 @@ def getChipInfo(dtc_path, filename):
         try:
             pos=line.index(DT_TAG)
             line=line.strip()
-            print(line)
             if line[-2] == '>':
                 line=line[pos+len(DT_TAG)-1:-2]
                 entryValid = 1
@@ -95,15 +94,15 @@ def getChipInfo(dtc_path, filename):
                         data[i] = int(data[i], 0)
 
                 chip.append({
-                'platform':data[0],
-                'revNum':data[1],
-                'dtb_size':0,
-                'dtb_file':"",
-                'wroteDtb':False,
-                'master_offset':0
+                    'platform': data[0],
+                    'revNum': data[1],
+                    'dtb_size': 0,
+                    'dtb_file': "",
+                    'wroteDtb': False,
+                    'master_offset': 0
                 })
                 chip[-1]['master'] = chip[0]
-        except e:
+        except Exception as e:
             print(e)
             continue
 
