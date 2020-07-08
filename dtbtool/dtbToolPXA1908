@@ -82,7 +82,11 @@ def getChipInfo(dtc_path, filename):
     chip = []
     for line in proc.stdout:
         entryValid = 0
+        if not DT_TAG in line:
+            continue
+            
         try:
+            print(line)
             pos=line.index(DT_TAG)
             line=line.strip()
             if line[-2] == '>':
