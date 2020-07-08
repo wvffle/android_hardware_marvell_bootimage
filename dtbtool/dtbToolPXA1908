@@ -85,6 +85,7 @@ def getChipInfo(dtc_path, filename):
         try:
             pos=line.index(DT_TAG)
             line=line.strip()
+            print(line)
             if line[-2] == '>':
                 line=line[pos+len(DT_TAG)-1:-2]
                 entryValid = 1
