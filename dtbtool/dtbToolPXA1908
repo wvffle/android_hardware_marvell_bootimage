@@ -81,6 +81,7 @@ def getChipInfo(dtc_path, filename):
     proc = subprocess.Popen([dtc_path, "-I", "dtb", "-O", "dts", filename], stdout=subprocess.PIPE)
     chip = []
     for line in proc.stdout:
+        line = line.decode("utf-8") 
         entryValid = 0
         if not DT_TAG in line:
             continue
