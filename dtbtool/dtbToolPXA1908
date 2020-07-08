@@ -37,7 +37,8 @@ def multikeysort(items, columns):
                 return mult * result
         else:
             return 0
-    return sorted(items, cmp=comparer)
+    from functools import cmp_to_key
+    return sorted(items, key=cmp_to_key(comparer))
 
 def add_chip(chips, chip, filepath, filename, pagesize):
     for i in chips:
