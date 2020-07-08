@@ -149,22 +149,26 @@ def main():
                 # Add sub_chip if not duplicate
                 add_chip(chips, sub_chip)
 
-    print("Found {} unique dtb".format(len(chips)))
-    if len(chips) == 0:
-        exit(0)
+    chips_len = len(chips)
+    
+    print("Found {} unique dtb".format(chips_len))
+    if chips_len == 0:
+        exit(1)
 
     # Sort by platform & revNum
     chips = multikeysort(chips, ["platform", "revNum"])
     print("Generating master DTB...")
 
+    dt_magic_len = len(DT_MAGIC)
+    
     # DTB img header
-    args.output.write(pack('{}s'.format(len(DT_MAGIC)), DT_MAGIC))
+    args.output.write(pack('{}s'.format(dt_magic_len), DT_MAGIC))
     # DTB img version
     args.output.write(pack('I', DT_VERSION))
     # Num of dtbs
-    args.output.write(pack('I', len(chips)))
+    args.output.write(pack('I', chips_len))
 
-    dtb_offset = len(DT_MAGIC) + 4 + 4 + 16 * len(chips) + 4
+    dtb_offset = dt_magic_len + 4 + 4 + 16 * chips_len + 4
     padding = args.pagesize - (dtb_offset % args.pagesize)
     dtb_offset += padding
     expected = dtb_offset
