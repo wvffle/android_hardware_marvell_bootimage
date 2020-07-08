@@ -153,7 +153,8 @@ def main():
     
     print("Found {} unique dtb".format(chips_len))
     if chips_len == 0:
-        exit(1)
+        args.output.close()
+        exit(-1)
 
     # Sort by platform & revNum
     chips = multikeysort(chips, ["platform", "revNum"])
@@ -189,7 +190,7 @@ def main():
     args.output.write(pack('I', 0))
     # Pad the file to pagesize
     if padding > 0:
-        args.output.write("".ljust(padding, '\0'))
+        args.output.write("".ljust(padding, '\0').encode('ascii'))
 
     # Write dtbs
     for chip in chips:
@@ -209,12 +210,12 @@ def main():
         padding = args.pagesize - (read_size % args.pagesize)
         if (padding + read_size) != chip['master']['dtb_size']:
             print("DTB size mismatch, please re-run")
-            args.output.close
+            args.output.close()
             remove(args.output.name)
             exit(-1)
 
         if padding > 0:
-            args.output.write("".ljust(padding, '\0'))
+            args.output.write("".ljust(padding, '\0').encode('ascii'))
 
     args.output.close()
 
