@@ -22,7 +22,6 @@ from hashlib import sha1
 import sys
 import re
 import subprocess
-import logging
 
 DT_MAGIC="PXA-19xx"
 DT_VERSION=1
@@ -104,7 +103,7 @@ def getChipInfo(dtc_path, filename):
                 })
                 chip[-1]['master'] = chip[0]
         except e:
-            logging.error(e)
+            print(e)
             continue
 
     proc.terminate()
